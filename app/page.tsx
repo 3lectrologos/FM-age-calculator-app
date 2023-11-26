@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver} from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import DownArrow from '@/public/icon-arrow.svg'
+import BeatLoader from 'react-spinners/BounceLoader'
 
 const dateSchema = z.object({
   day: z.string()
@@ -46,10 +47,12 @@ const dateSchema = z.object({
     path: ['date']
   })
 
-function DateInput({ callback }: { callback: (age: {years: string, months: string, days: string}) => void }) {
+function DateInput({ callback }: { callback: (age: {years: string, months: string, days: string}) => Promise<void> }) {
   const names = ['day', 'month', 'year']
   const placeholders = ['DD', 'MM', 'YYYY']
   const maxLengths = [2, 2, 4]
+
+  const [loading, setLoading] = useState(false)
 
   const {
     register,
@@ -60,13 +63,12 @@ function DateInput({ callback }: { callback: (age: {years: string, months: strin
     reValidateMode: 'onSubmit'
   })
 
-  function submitHandler(data: any) {
+  async function submitHandler(data: any) {
     const date = new Date()
     date.setFullYear(data.year)
     date.setMonth(data.month - 1)
     date.setDate(data.day)
     const now = new Date()
-    const diff = now.getTime() - date.getTime()
     let years = now.getFullYear() - date.getFullYear()
     let months = now.getMonth() - date.getMonth()
     let days = now.getDate() - date.getDate()
@@ -80,7 +82,9 @@ function DateInput({ callback }: { callback: (age: {years: string, months: strin
       const prevMonthNumDays = new Date(now.getFullYear(), now.getMonth(), 0).getDate()
       days = now.getDate() + prevMonthNumDays - date.getDate()
     }
-    callback({ years: years.toString(), months: months.toString(), days: days.toString() })
+    setLoading(true)
+    await callback({ years: years.toString(), months: months.toString(), days: days.toString() })
+    setLoading(false)
   }
 
   function dateError() {
@@ -127,9 +131,21 @@ function DateInput({ callback }: { callback: (age: {years: string, months: strin
         ))}
       </div>
       <div className={`relative w-full border-b border-lightgray`}>
-        <button className={`absolute top-0 right-[50%] transform translate-x-1/2 -translate-y-1/2 w-16 h-16 p-5 flex justify-center items-center rounded-full transition-colors bg-purple text-white lg:w-24 lg:h-24 lg:p-6 lg:right-0 lg:translate-x-0 lg:transition-colors lg:hover:bg-offblack`}
-                type='submit'>
-          <DownArrow className={`stroke-[2px]`} />
+        <button className={`absolute top-0 right-[50%] transform translate-x-1/2 -translate-y-1/2 w-16 h-16 p-5 flex justify-center items-center rounded-full transition-colors bg-purple text-white lg:w-24 lg:h-24 lg:p-6 lg:right-0 lg:translate-x-0 lg:transition-colors lg:hover:bg-offblack ${loading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                type='submit'
+                disabled={loading}
+        >
+          {loading ?
+            <div>
+              <div className={`lg:hidden`}>
+                <BeatLoader color='white' size={32} />
+              </div>
+              <div className={`hidden lg:block`}>
+                <BeatLoader color='white' size={48} />
+              </div>
+            </div> :
+            <DownArrow className={`stroke-[2.5px] lg:stroke-[2px]`} />
+          }
         </button>
       </div>
     </form>
@@ -161,15 +177,19 @@ export default function Home() {
   const [years, setYears] = useState('')
   const [months, setMonths] = useState('')
   const [days, setDays] = useState('')
+
+  async function updateAge({ years, months, days }: { years: string, months: string, days: string }) {
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    setYears(years)
+    setMonths(months)
+    setDays(days)
+  }
+
   return (
     <div className={`flex flex-col bg-offwhite items-center min-h-screen min-w-fit lg:justify-center`}>
       <div className={`flex flex-col justify-center items-center py-[88px] px-4 lg:py-0`}>
         <div className={`flex flex-col gap-y-16 w-[343px] bg-white rounded-t-3xl rounded-bl-3xl rounded-br-[100px] px-6 py-12 lg:w-[840px] lg:p-14 lg:rounded-br-[200px]`}>
-          <DateInput callback={({ years, months, days }) => {
-            setYears(years)
-            setMonths(months)
-            setDays(days)
-          }} />
+          <DateInput callback={updateAge} />
           <AgeDisplay years={years} months={months} days={days} />
         </div>
       </div>
