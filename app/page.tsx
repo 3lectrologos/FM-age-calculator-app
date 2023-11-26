@@ -94,28 +94,28 @@ function DateInput({ callback }: { callback: (age: {years: string, months: strin
   }, [errors, callback])
 
   return (
-    <form className={`flex flex-col items-center gap-y-16`} onSubmit={handleSubmit(submitHandler)}>
-      <div className={`flex flex-row gap-x-4`}>
+    <form className={`flex flex-col items-center gap-y-16 lg:items-start`} onSubmit={handleSubmit(submitHandler)}>
+      <div className={`flex flex-row gap-x-4 lg:gap-x-8`}>
         {names.map((name, index) => (
-          <div className={`flex flex-col w-full`}
+          <div className={`flex flex-col w-full gap-y-2 lg:gap-y-4`}
                key={index}>
-            <label className={`uppercase text-[12px] leading-[12px] ${(errors[name]?.message || dateError()) ? 'text-lightred' : 'text-smokeygray'} tracking-[0.27em] font-semibold mb-2`}
+            <label className={`uppercase text-[12px] leading-[12px] ${(errors[name]?.message || dateError()) ? 'text-lightred' : 'text-smokeygray'} tracking-[0.27em] font-semibold lg:text-[14px]`}
                    htmlFor={name}>
               {name}
             </label>
-            <input className={`border ${(errors[name]?.message || dateError()) ? 'border-lightred' : 'border-lightgray'} w-full rounded-lg text-offblack text-[20px] font-bold px-4 py-3 focus:border-purple focus:outline-none`}
+            <input className={`border ${(errors[name]?.message || dateError()) ? 'border-lightred' : 'border-lightgray'} w-full rounded-lg text-offblack text-[20px] font-bold px-4 py-3 focus:border-purple focus:outline-none lg:text-[32px] lg:w-40`}
                    id={name} type='text' maxLength={maxLengths[index]} placeholder={placeholders[index]}
                    {...register(name, {
                      //onBlur: () => trigger()
                    })}
             />
             {errors[name]?.message &&
-              <span className={`text-lightred text-[8px] leading-[9px] tracking-tight italic mt-2`}>
+              <span className={`text-lightred text-[8px] leading-[8px] tracking-tight italic lg:text-[14px] lg:leading-[14px]`}>
                 {(errors[name]?.message ?? '').toString()}
               </span>
             }
             {name === 'day' && dateError() &&
-              <span className={`text-lightred text-[8px] leading-[9px] tracking-tight italic mt-2`}>
+              <span className={`text-lightred text-[8px] leading-[8px] tracking-tight italic lg:text-[14px] lg:leading-[14px]`}>
                 {(dateError() ?? '').toString()}
               </span>
             }
@@ -123,9 +123,9 @@ function DateInput({ callback }: { callback: (age: {years: string, months: strin
         ))}
       </div>
       <div className={`relative w-full border-b border-lightgray`}>
-        <button className={`absolute top-0 left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 flex justify-center items-center rounded-full bg-purple text-white`}
+        <button className={`absolute top-0 right-[50%] transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 p-5 flex justify-center items-center rounded-full transition bg-purple text-white lg:w-24 lg:h-24 lg:p-6 lg:right-0 lg:translate-x-0 lg:transition lg:hover:bg-offblack`}
                 type='submit'>
-          <DownArrow className={`w-[26px] stroke-[3px]`} />
+          <DownArrow className={`stroke-[2px]`} />
         </button>
       </div>
     </form>
@@ -134,8 +134,8 @@ function DateInput({ callback }: { callback: (age: {years: string, months: strin
 
 function NumberDisplay({ number, label }: { number: string, label: string }) {
   return (
-    <div className={`flex flex-row text-offblack text-[55px] leading-[110%] font-extrabold italic tracking-[-0.03em]`}>
-      <span className={`text-purple mr-2.5`}>
+    <div className={`flex flex-row text-offblack text-[55px] leading-[110%] font-extrabold italic tracking-[-0.03em] lg:text-[104px]`}>
+      <span className={`text-purple mr-2.5 lg:mr-3.5`}>
         {number === '' ? '- -' : number}
       </span>
       {label}
@@ -158,9 +158,9 @@ export default function Home() {
   const [months, setMonths] = useState('')
   const [days, setDays] = useState('')
   return (
-    <div className={`flex flex-col bg-offwhite items-center min-h-screen min-w-fit`}>
-      <div className={`flex flex-col justify-center items-center py-[88px] px-4`}>
-        <div className={`flex flex-col gap-y-16 w-[343px] bg-white rounded-t-3xl rounded-bl-3xl rounded-br-[100px] px-6 py-12`}>
+    <div className={`flex flex-col bg-offwhite items-center min-h-screen min-w-fit lg:justify-center`}>
+      <div className={`flex flex-col justify-center items-center py-[88px] px-4 lg:py-0`}>
+        <div className={`flex flex-col gap-y-16 w-[343px] bg-white rounded-t-3xl rounded-bl-3xl rounded-br-[100px] px-6 py-12 lg:w-[840px] lg:p-14 lg:rounded-br-[200px]`}>
           <DateInput callback={({ years, months, days }) => {
             setYears(years)
             setMonths(months)
