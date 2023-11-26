@@ -7,6 +7,8 @@ import * as z from 'zod'
 import DownArrow from '@/public/icon-arrow.svg'
 import BeatLoader from 'react-spinners/BounceLoader'
 
+type MaybeAge = { years: number, months: number, days: number } | undefined
+
 const dateSchema = z.object({
   day: z.string()
     .min(1, { message: 'This field is required' })
@@ -47,7 +49,7 @@ const dateSchema = z.object({
     path: ['date']
   })
 
-function DateInput({ callback }: { callback: (age: {years: number, months: number, days: number}) => Promise<void> }) {
+function DateInput({ callback }: { callback: (_age: MaybeAge) => Promise<void> }) {
   const names = ['day', 'month', 'year']
   const placeholders = ['DD', 'MM', 'YYYY']
   const maxLengths = [2, 2, 4]
@@ -97,7 +99,7 @@ function DateInput({ callback }: { callback: (age: {years: number, months: numbe
 
   useEffect(() => {
     if (Object.keys(errors).length !== 0) {
-      callback({years: -1, months: -1, days: -1})
+      callback(undefined)
     }
   }, [errors, callback])
 
@@ -189,12 +191,14 @@ export default function Home() {
     }
   }
 
-  async function updateAge({ years, months, days }: { years: number, months: number, days: number }) {
-    if (years === -1 || months === -1 || days === -1) {
+  async function updateAge(age: MaybeAge) {
+    if (!age) {
       setYears(-1)
       setMonths(-1)
       setDays(-1)
+      return
     }
+    const { years, months, days } = age
     const yearsPromise = updateOne({ setter: setYears, value: years, duration: 1500 })
     const monthsPromise = updateOne({ setter: setMonths, value: months, duration: 2000 })
     const daysPromise = updateOne({ setter: setDays, value: days, duration: 2500 })
