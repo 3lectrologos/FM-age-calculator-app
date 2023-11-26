@@ -207,7 +207,7 @@ export default function Home() {
   }
 
   return (
-    <div className={`flex flex-col bg-offwhite items-center min-h-screen min-w-fit lg:justify-center`}>
+    <div className={`flex flex-col items-center min-h-screen min-w-fit lg:justify-center`}>
       <div className={`flex flex-col justify-center items-center py-[88px] px-4 lg:py-32`}>
         <div className={`flex flex-col gap-y-16 w-[343px] bg-white rounded-t-3xl rounded-bl-3xl rounded-br-[100px] px-6 py-12 lg:w-[840px] lg:p-14 lg:rounded-br-[200px] lg:gap-y-12`}>
           <DateInput callback={updateAge} />
