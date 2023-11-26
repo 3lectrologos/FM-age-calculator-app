@@ -104,7 +104,7 @@ function DateInput({ callback }: { callback: (_age: MaybeAge) => Promise<void> }
   }, [errors, callback])
 
   return (
-    <form className={`flex flex-col items-center gap-y-16 lg:items-start`} onSubmit={handleSubmit(submitHandler)}>
+    <form className={`flex flex-col items-center gap-y-16 lg:items-start lg:gap-y-12`} onSubmit={handleSubmit(submitHandler)}>
       <div className={`flex flex-row gap-x-4 lg:gap-x-8`}>
         {names.map((name, index) => (
           <div className={`flex flex-col w-full gap-y-2 lg:gap-y-4`}
@@ -208,7 +208,7 @@ export default function Home() {
   return (
     <div className={`flex flex-col bg-offwhite items-center min-h-screen min-w-fit lg:justify-center`}>
       <div className={`flex flex-col justify-center items-center py-[88px] px-4 lg:py-0`}>
-        <div className={`flex flex-col gap-y-16 w-[343px] bg-white rounded-t-3xl rounded-bl-3xl rounded-br-[100px] px-6 py-12 lg:w-[840px] lg:p-14 lg:rounded-br-[200px]`}>
+        <div className={`flex flex-col gap-y-16 w-[343px] bg-white rounded-t-3xl rounded-bl-3xl rounded-br-[100px] px-6 py-12 lg:w-[840px] lg:p-14 lg:rounded-br-[200px] lg:gap-y-12`}>
           <DateInput callback={updateAge} />
           <AgeDisplay years={years} months={months} days={days} />
         </div>
