@@ -67,9 +67,13 @@ function DateInput({ callback }: { callback: (age: {years: string, months: strin
     date.setDate(data.day)
     const now = new Date()
     const diff = now.getTime() - date.getTime()
-    const years = now.getFullYear() - date.getFullYear()
+    let years = now.getFullYear() - date.getFullYear()
     let months = now.getMonth() - date.getMonth()
     let days = now.getDate() - date.getDate()
+    if (months < 0) {
+      years -= 1
+      months += 12
+    }
     if (days < 0) {
       months -= 1
       // NOTE: This is a tricky way to get the number of days in the *previous* month.
