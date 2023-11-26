@@ -47,7 +47,7 @@ const dateSchema = z.object({
     path: ['date']
   })
 
-function DateInput({ callback }: { callback: (age: {years: string, months: string, days: string}) => Promise<void> }) {
+function DateInput({ callback }: { callback: (age: {years: number, months: number, days: number}) => Promise<void> }) {
   const names = ['day', 'month', 'year']
   const placeholders = ['DD', 'MM', 'YYYY']
   const maxLengths = [2, 2, 4]
@@ -83,7 +83,7 @@ function DateInput({ callback }: { callback: (age: {years: string, months: strin
       days = now.getDate() + prevMonthNumDays - date.getDate()
     }
     setLoading(true)
-    await callback({ years: years.toString(), months: months.toString(), days: days.toString() })
+    await callback({ years, months, days })
     setLoading(false)
   }
 
@@ -97,7 +97,7 @@ function DateInput({ callback }: { callback: (age: {years: string, months: strin
 
   useEffect(() => {
     if (Object.keys(errors).length !== 0) {
-      callback({years: '', months: '', days: ''})
+      callback({years: -1, months: -1, days: -1})
     }
   }, [errors, callback])
 
@@ -152,18 +152,18 @@ function DateInput({ callback }: { callback: (age: {years: string, months: strin
   )
 }
 
-function NumberDisplay({ number, label }: { number: string, label: string }) {
+function NumberDisplay({ number, label }: { number: number, label: string }) {
   return (
     <div className={`flex flex-row text-offblack text-[55px] leading-[110%] font-extrabold italic tracking-[-0.03em] lg:text-[104px]`}>
       <span className={`text-purple mr-2.5 lg:mr-3.5`}>
-        {number === '' ? '- -' : number}
+        {number === -1 ? '- -' : number}
       </span>
       {label}
     </div>
   )
 }
 
-function AgeDisplay({ years='', months='', days='' }: { years: string, months: string, days: string }) {
+function AgeDisplay({ years=-1, months=-1, days=-1 }: { years: number, months: number, days: number }) {
   return (
     <div className={`flex flex-col gap-y-0.5`}>
       <NumberDisplay number={years} label='years' />
@@ -174,15 +174,31 @@ function AgeDisplay({ years='', months='', days='' }: { years: string, months: s
 }
 
 export default function Home() {
-  const [years, setYears] = useState('')
-  const [months, setMonths] = useState('')
-  const [days, setDays] = useState('')
+  const [years, setYears] = useState(-1)
+  const [months, setMonths] = useState(-1)
+  const [days, setDays] = useState(-1)
 
-  async function updateAge({ years, months, days }: { years: string, months: string, days: string }) {
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    setYears(years)
-    setMonths(months)
-    setDays(days)
+  async function updateOne({ setter, value, duration }: { setter: (value: number) => void, value: number, duration: number }) {
+    let delay = duration / value
+    let endDelay = delay * 2
+    let delayMultiplier = Math.pow(endDelay / delay, 1 / value)
+    for (let i = 0; i < value; i++) {
+      setter(i)
+      await new Promise(r => setTimeout(r, delay))
+      delay *= delayMultiplier
+    }
+  }
+
+  async function updateAge({ years, months, days }: { years: number, months: number, days: number }) {
+    if (years === -1 || months === -1 || days === -1) {
+      setYears(-1)
+      setMonths(-1)
+      setDays(-1)
+    }
+    const yearsPromise = updateOne({ setter: setYears, value: years, duration: 1500 })
+    const monthsPromise = updateOne({ setter: setMonths, value: months, duration: 2000 })
+    const daysPromise = updateOne({ setter: setDays, value: days, duration: 2500 })
+    await Promise.all([yearsPromise, monthsPromise, daysPromise])
   }
 
   return (
