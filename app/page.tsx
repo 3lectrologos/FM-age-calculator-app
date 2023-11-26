@@ -127,7 +127,7 @@ function DateInput({ callback }: { callback: (age: {years: string, months: strin
         ))}
       </div>
       <div className={`relative w-full border-b border-lightgray`}>
-        <button className={`absolute top-0 right-[50%] transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 p-5 flex justify-center items-center rounded-full transition bg-purple text-white lg:w-24 lg:h-24 lg:p-6 lg:right-0 lg:translate-x-0 lg:transition lg:hover:bg-offblack`}
+        <button className={`absolute top-0 right-[50%] transform translate-x-1/2 -translate-y-1/2 w-16 h-16 p-5 flex justify-center items-center rounded-full transition-colors bg-purple text-white lg:w-24 lg:h-24 lg:p-6 lg:right-0 lg:translate-x-0 lg:transition-colors lg:hover:bg-offblack`}
                 type='submit'>
           <DownArrow className={`stroke-[2px]`} />
         </button>
