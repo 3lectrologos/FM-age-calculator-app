@@ -184,7 +184,7 @@ export default function Home() {
     let delay = duration / value
     let endDelay = delay * 2
     let delayMultiplier = Math.pow(endDelay / delay, 1 / value)
-    for (let i = 0; i < value; i++) {
+    for (let i = 0; i <= value; i++) {
       setter(i)
       await new Promise(r => setTimeout(r, delay))
       delay *= delayMultiplier
