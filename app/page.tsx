@@ -94,7 +94,7 @@ function DateInput({ callback }: { callback: (age: {years: string, months: strin
   }, [errors, callback])
 
   return (
-    <form className={`flex flex-col items-center gap-y-[62px]`} onSubmit={handleSubmit(submitHandler)}>
+    <form className={`flex flex-col items-center gap-y-16`} onSubmit={handleSubmit(submitHandler)}>
       <div className={`flex flex-row gap-x-4`}>
         {names.map((name, index) => (
           <div className={`flex flex-col w-full`}
@@ -103,7 +103,7 @@ function DateInput({ callback }: { callback: (age: {years: string, months: strin
                    htmlFor={name}>
               {name}
             </label>
-            <input className={`border ${(errors[name]?.message || dateError()) ? 'border-lightred' : 'border-lightgray'} h-[52px] w-full rounded-lg text-[20px] font-bold p-4 focus:border-purple focus:outline-none`}
+            <input className={`border ${(errors[name]?.message || dateError()) ? 'border-lightred' : 'border-lightgray'} w-full rounded-lg text-offblack text-[20px] font-bold px-4 py-3 focus:border-purple focus:outline-none`}
                    id={name} type='text' maxLength={maxLengths[index]} placeholder={placeholders[index]}
                    {...register(name, {
                      //onBlur: () => trigger()
@@ -122,7 +122,7 @@ function DateInput({ callback }: { callback: (age: {years: string, months: strin
           </div>
         ))}
       </div>
-      <div className={`relative w-full border-b border-lightgray/75`}>
+      <div className={`relative w-full border-b border-lightgray`}>
         <button className={`absolute top-0 left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 flex justify-center items-center rounded-full bg-purple text-white`}
                 type='submit'>
           <DownArrow className={`w-[26px] stroke-[3px]`} />
@@ -134,7 +134,7 @@ function DateInput({ callback }: { callback: (age: {years: string, months: strin
 
 function NumberDisplay({ number, label }: { number: string, label: string }) {
   return (
-    <div className={`flex flex-row text-[54px] leading-[55px] font-extrabold italic tracking-tight`}>
+    <div className={`flex flex-row text-offblack text-[55px] leading-[110%] font-extrabold italic tracking-[-0.03em]`}>
       <span className={`text-purple mr-2.5`}>
         {number === '' ? '- -' : number}
       </span>
@@ -145,7 +145,7 @@ function NumberDisplay({ number, label }: { number: string, label: string }) {
 
 function AgeDisplay({ years='', months='', days='' }: { years: string, months: string, days: string }) {
   return (
-    <div className={`flex flex-col gap-y-1.5`}>
+    <div className={`flex flex-col gap-y-0.5`}>
       <NumberDisplay number={years} label='years' />
       <NumberDisplay number={months} label='months' />
       <NumberDisplay number={days} label='days' />
@@ -158,9 +158,9 @@ export default function Home() {
   const [months, setMonths] = useState('')
   const [days, setDays] = useState('')
   return (
-    <div className={`flex flex-col bg-offwhite items-center min-h-screen`}>
-      <div className={`flex flex-col justify-center items-center py-24`}>
-        <div className={`flex flex-col gap-y-[66px] w-[344px] bg-white rounded-t-3xl rounded-bl-3xl rounded-br-[100px] px-[26px] pt-[54px] pb-12`}>
+    <div className={`flex flex-col bg-offwhite items-center min-h-screen min-w-fit`}>
+      <div className={`flex flex-col justify-center items-center py-[88px] px-4`}>
+        <div className={`flex flex-col gap-y-16 w-[343px] bg-white rounded-t-3xl rounded-bl-3xl rounded-br-[100px] px-6 py-12`}>
           <DateInput callback={({ years, months, days }) => {
             setYears(years)
             setMonths(months)
